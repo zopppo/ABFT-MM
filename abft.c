@@ -17,7 +17,7 @@ int toMS(struct timeval* tv) {
 
 int main(int argc, char *argv[])
 {
-	double **A, **B, **Aprime, **Bprime, **CprimeG, **Cprime;
+	int **A, **B, **Aprime, **Bprime, **CprimeG, **Cprime;
 	char *aFileName = "A.dat", *bFileName = "B.dat", *cPrimeFileName = "CPrime.dat";
 	int aRows = 5, aCols = 5;
 	int bRows = 5, bCols = 5;

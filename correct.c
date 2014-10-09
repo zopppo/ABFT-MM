@@ -6,9 +6,9 @@
 
 int main(int argc, char *argv[])
 {
-	char *inFileName; 
+	char *inFileName;
 	char *outFileName = "outMatrix.dat";
-	double **matrix;
+	int **matrix;
 	int *rowE, *colE;
 	int rowErrors, colErrors;
 	int nCorrected;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	else if (argsParsed < nArgs) {
 		/* Print any default values */
 		if (!oFlag) {
-			printf("-o %s ", outFileName);	
+			printf("-o %s ", outFileName);
 		}
 
 		printf("\n");

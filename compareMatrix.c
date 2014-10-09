@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-	double **A, **B;
+	int **A, **B;
 	char *aFileName = "myMatrix.dat", *bFileName = "myMatrix.dat";
 	int aRows = 2, aCols = 2;
 	int bRows = 2, bCols = 2;

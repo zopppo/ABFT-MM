@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 	/* Default values */
 	int rows = 5;
 	int cols = 5;
-	double lower = -100, upper = 100;
-	double **matrix;
+	int lower = -100, upper = 100;
+	int **matrix;
 	char *outFileName = "myMatrix.dat";
 	int c = 0;
 	int nArgs = 5;
@@ -64,12 +64,12 @@ int main(int argc, char *argv[])
 		}
 
 		if (!lFlag) {
-			printf("-l %.2lf ", lower);
+			printf("-l %d ", lower);
 
 		}
 
 		if (!uFlag) {
-			printf("-u %.2lf ", upper);
+			printf("-u %d ", upper);
 		}
 
 		if (!oFlag) {

@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-	double **A, **B, **C;
+	int **A, **B, **C;
 	char *aFileName = "myMatrix.dat", *bFileName = "myMatrix.dat", *cFileName = "myMultMatrix.dat";
 	int aRows = 2, aCols = 2;
 	int bRows = 2, bCols = 2;
@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
 			printf("-a %s ", aFileName);
 		}
 		if (!bFlag) {
-			printf("-b %s ", bFileName);	
+			printf("-b %s ", bFileName);
 		}
 
 		if (!oFlag) {
-			printf("-o %s ", cFileName);	
+			printf("-o %s ", cFileName);
 		}
 
 		printf("\n");

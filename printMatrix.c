@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	/* no default filename */
 	char *fileName;
 	int c = 0;
-	double **matrix;
+	int **matrix;
 	int rows, cols;
 	int argsParsed = 0;
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	}
 
 	readMatrix(&rows, &cols, &matrix, fileName);
-	printMatrix(rows, cols, matrix);	
+	printMatrix(rows, cols, matrix);
 	deallocateMatrix(matrix);
 	return 0;
-} 
+}

@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
 	char *inFileName = "inMatrix.dat";
 	char *outFileName = "errorReport.txt";
-	double **matrix;
+	int **matrix;
 	int rows, cols;
 	int *rowE, *colE;
 	int rowErrors, colErrors;
@@ -47,12 +47,12 @@ int main(int argc, char *argv[])
 		}
 
 		if (!oFlag) {
-			printf("-o %s ", outFileName);	
+			printf("-o %s ", outFileName);
 		}
 
 		printf("\n");
 	}
-	
+
 	readMatrix(&rows, &cols, &matrix, inFileName);
 	detect(rows, cols, matrix, &rowE, &colE, &rowErrors, &colErrors);
 	deallocateMatrix(matrix);
@@ -71,5 +71,5 @@ void writeReport(int *rowE, int *colE, int rowErrors, int colErrors, char *outFi
 	FILE *file = fopen(outFileName, "w");
 	fprintf(file, "ERROR REPORT\n");
 	printErrors(rowE, colE, rowErrors, colErrors, file);
-	
+
 }

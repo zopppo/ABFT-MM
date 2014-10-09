@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-	double **B, **Bprime;
+	int **B, **Bprime;
 	char *inFileName;
 	int bRows, bCols;
 	char *outFileName = "outMatrix.dat";
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 	else if (argsParsed < nArgs) {
 		/* Print any default values */
 		if (!oFlag) {
-			printf("-o %s ", outFileName);	
+			printf("-o %s ", outFileName);
 		}
 		printf("\n");
 	}

@@ -4,7 +4,7 @@
 
 
 /* allocates a row-major 2D array using contiguous data block */
-void allocateMatrix(int rows, int cols, double ***matrix) {
+void allocateMatrix(int rows, int cols, int ***matrix) {
 	int i;
 
 	if (rows <= 0) {
@@ -18,8 +18,8 @@ void allocateMatrix(int rows, int cols, double ***matrix) {
 		errExit("Matrix is NULL. Cannot allocate.");
 	}
 
-	*matrix = malloc(rows * sizeof(double *));
-	(*matrix)[0] = malloc(rows * cols * sizeof(double));
+	*matrix = malloc(rows * sizeof(int *));
+	(*matrix)[0] = malloc(rows * cols * sizeof(int));
 
 	for (i = 1; i < rows; i++)  {
 		(*matrix)[i] = (*matrix)[0] + i * cols;
@@ -27,7 +27,7 @@ void allocateMatrix(int rows, int cols, double ***matrix) {
 }
 
 /* deallocate matrix allocated with allocateMatrix() */
-void deallocateMatrix(double **matrix){
+void deallocateMatrix(int **matrix){
 	if (matrix == NULL)
 		errExit("Matrix not allocated.");
 	free(matrix[0]);
@@ -35,7 +35,7 @@ void deallocateMatrix(double **matrix){
 }
 
 /* initialize an allocated matrix with values distributed UNIF(lower, upper) */
-void initializeMatrix(double lower, double upper, int rows, int cols, double **matrix){
+void initializeMatrix(int lower, int upper, int rows, int cols, int **matrix){
 	int i, j;
 
 	if (rows <= 0)
@@ -54,7 +54,7 @@ void initializeMatrix(double lower, double upper, int rows, int cols, double **m
 }
 
 /* writes matrix to binary file, first two ints in file represent the rows and cols */
-void writeMatrix(int rows, int cols, double** matrix, char* fileName) {
+void writeMatrix(int rows, int cols, int** matrix, char* fileName) {
 	if (fileName == NULL)
 		errExit("Filename is null. Cannot write.");
 	FILE *file = fopen(fileName, "wb");
@@ -67,7 +67,7 @@ void writeMatrix(int rows, int cols, double** matrix, char* fileName) {
 			errExit("Rows did not write.");
 		if (fwrite(&cols, sizeof(int), 1, file) == 0)
 			errExit("Cols did not write.");
-		if (fwrite(*matrix, sizeof(double),  rows * cols, file) == 0)
+		if (fwrite(*matrix, sizeof(int),  rows * cols, file) == 0)
 			errExit("Matrix did not write.");
 	}
 	else {
@@ -78,7 +78,7 @@ void writeMatrix(int rows, int cols, double** matrix, char* fileName) {
 }
 
 /* load matrix from binary file, first two ints in file represent the rows and cols */
-void readMatrix(int *rows, int *cols, double ***matrix, char *fileName) {
+void readMatrix(int *rows, int *cols, int ***matrix, char *fileName) {
 	FILE *file = fopen(fileName, "rb");
 
 	if (fileName == NULL) {
@@ -103,7 +103,7 @@ void readMatrix(int *rows, int *cols, double ***matrix, char *fileName) {
 		}
 
 		allocateMatrix(*rows, *cols, matrix);
-		if (!fread(**matrix, sizeof(double), *rows * *cols, file)) {
+		if (!fread(**matrix, sizeof(int), *rows * *cols, file)) {
 			errExit("Cannot read matrix");
 		}
 	}
@@ -114,7 +114,7 @@ void readMatrix(int *rows, int *cols, double ***matrix, char *fileName) {
 }
 
 /* prints matrix to stdout */
-void printMatrix(int rows, int cols, double** matrix) {
+void printMatrix(int rows, int cols, int** matrix) {
 	int i, j;
 
 	if (matrix == NULL) {
@@ -122,17 +122,17 @@ void printMatrix(int rows, int cols, double** matrix) {
 	}
 	for (i = 0; i < rows; i++) {
 		for (j = 0; j < cols; j++) {
-			printf("%8.2lf ", matrix[i][j]);
+			printf("%d ", matrix[i][j]);
 		}
 		printf("\n");
 	}
 }
 
 /* multiply matrices A and B, creates new C, and places result in C */
-void multiplyMatrix(int aRows, int aCols, double bRows, double bCols, double **A, double **B, double ***C) {
+void multiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int ***C) {
 	int i, j, k;
 	int cRows = aRows, cCols = bCols;
-	double sum;
+	int sum;
 	if (A == NULL) {
 		errExit("Matrix A is null.");
 	}
@@ -159,9 +159,9 @@ void multiplyMatrix(int aRows, int aCols, double bRows, double bCols, double **A
 }
 
 /* Fix errors by recomputing using dot product */
-void recompute(int aRows, int aCols, int bRows, int bCols, double **A, double **B, double **C,
+void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
 		int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
-	double sum;
+	int sum;
 	int i, j, k;
 	int errorRow, errorCol;
 	if (rowE[0] == -1)
@@ -198,9 +198,9 @@ void recompute(int aRows, int aCols, int bRows, int bCols, double **A, double **
 	}
 }
 
-void checkSumA(int rows, int cols, double **A, double ***Aprime) {
+void checkSumA(int rows, int cols, int **A, int ***Aprime) {
 	int i, j;
-	double sum;
+	int sum;
 	allocateMatrix(rows + 1, cols, Aprime);
 	copyMatrix(rows, cols, A, *Aprime);
 	if (rows <= 0) {
@@ -232,9 +232,9 @@ void checkSumA(int rows, int cols, double **A, double ***Aprime) {
 	#endif
 }
 
-void checkSumB(int rows, int cols, double **B, double ***Bprime) {
+void checkSumB(int rows, int cols, int **B, int ***Bprime) {
 	int i, j;
-	double sum;
+	int sum;
 	allocateMatrix(rows, cols + 1, Bprime);
 	copyMatrix(rows, cols, B, *Bprime);
 
@@ -262,7 +262,7 @@ void checkSumB(int rows, int cols, double **B, double ***Bprime) {
 	#endif
 }
 
-void copyMatrix(int rows, int cols, double **sourceMatrix, double **destMatrix) {
+void copyMatrix(int rows, int cols, int **sourceMatrix, int **destMatrix) {
 	int i, j;
 	if (sourceMatrix == NULL)
 		errExit("sourceMatrix is NULL. Cannot copy.");
@@ -277,9 +277,9 @@ void copyMatrix(int rows, int cols, double **sourceMatrix, double **destMatrix) 
 }
 
 /* Detects errors and prints them to a file */
-bool detect(int rows, int cols, double **matrix, int **rowE, int **colE, int *rowErrors, int *colErrors) {
+bool detect(int rows, int cols, int **matrix, int **rowE, int **colE, int *rowErrors, int *colErrors) {
 	int i, j;
-	double check;
+	int check;
 
 	if (rows <= 0)
 		errExit("Rows must be positive. Cannot detect.");
@@ -345,7 +345,7 @@ bool detect(int rows, int cols, double **matrix, int **rowE, int **colE, int *ro
 	return (*rowErrors != 0 && *colErrors != 0);
 }
 /* Finds the sum of all elements in the row excluding the element at eRow and the checksum element */
-double exclRowSum(int row, int col, int rows, int cols, double **matrix) {
+int exclRowSum(int row, int col, int rows, int cols, int **matrix) {
 	int i;
 	int sum = 0;
 	if (matrix == NULL)
@@ -365,7 +365,7 @@ double exclRowSum(int row, int col, int rows, int cols, double **matrix) {
 }
 
 /* Finds the sum of all elements in the col excluding the element at eRow and the checksum element */
-double exclColSum(int row, int col, int rows, int cols, double **matrix) {
+int exclColSum(int row, int col, int rows, int cols, int **matrix) {
 	int i;
 	int sum = 0;
 	if (matrix == NULL)
@@ -385,10 +385,10 @@ double exclColSum(int row, int col, int rows, int cols, double **matrix) {
 }
 
 /* Accepts a full checksum matrix */
-bool correct(int rows, int cols, double **matrix, int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
+bool correct(int rows, int cols, int **matrix, int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
 	int i;
 	int row, col;
-	double sum;
+	int sum;
 	bool couldCorrect = true;
 	if (matrix == NULL)
 		errExit("Matrix is NULL. Cannot correct");
@@ -491,7 +491,7 @@ void printErrors(int *rowE, int *colE, int rowErrors, int colErrors, FILE *file)
 }
 
 
-bool compareMatrix(int rows, int cols, double **A, double **B) {
+bool compareMatrix(int rows, int cols, int **A, int **B) {
 	int i, j;
 	bool identical = true;
 	if (A == NULL)
@@ -509,11 +509,11 @@ bool compareMatrix(int rows, int cols, double **A, double **B) {
 }
 
 /* A demonstration driver function */
-void abftMultiply(int aRows, int aCols, int bRows, int bCols, double **A, double **B, double ***C) {
+void abftMultiply(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int ***C) {
 	/* Multipliable */
 	if (aCols != bRows)
 		errExit("The rows and columns do not match.");
-	double **Aprime, **Bprime, **Cprime, **CprimeCopy;
+	int **Aprime, **Bprime, **Cprime, **CprimeCopy;
 	/* List of errors */
 	int *rowE, *colE;
 	int AprimeRows = aRows + 1, AprimeCols = aCols;
