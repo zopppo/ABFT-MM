@@ -87,7 +87,12 @@ int main(int argc, char *argv[])
     printf("%d. ", sections);
 	printErrors(rowE, colE, rowErrors, colErrors, stdout);
     // Print the locations of the errors
+    int expectedDotProducts = aRows * bCols;
  	while (!isCorrect) {
+        if (dotProductCalled > expectedDotProducts * 10) {
+            printf("Exceeded expected dotProducts ");
+            break;
+        }
 		recompute(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, Cprime, rowE, colE, rowErrors, colErrors, &nRecomputed);
 	    detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
         isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
