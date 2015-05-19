@@ -1,24 +1,27 @@
 #include "matrix.h"
 #include <stdlib.h>
 #include <stdarg.h>
+#include <limits.h>
 
+
+int dotProductCalled = 0;
 
 /* allocates a row-major 2D array using contiguous data block */
 void allocateMatrix(int rows, int cols, int ***matrix) {
-	int i;
+    int i;
 
-	if (rows <= 0) {
-		errExit("Rows must be positive. Cannot allocate.");
-	}
-	else if (cols <= 0) {
-		errExit("Cols must be positive. Cannot allocate.");
-	}
+    if (rows <= 0) {
+        errExit("Rows must be positive. Cannot allocate.");
+    }
+    else if (cols <= 0) {
+        errExit("Cols must be positive. Cannot allocate.");
+    }
 
-	if (matrix == NULL) {
-		errExit("Matrix is NULL. Cannot allocate.");
-	}
+    if (matrix == NULL) {
+        errExit("Matrix is NULL. Cannot allocate.");
+    }
 
-	*matrix = malloc(rows * sizeof(int *));
+    *matrix = malloc(rows * sizeof(int *));
 	(*matrix)[0] = malloc(rows * cols * sizeof(int));
 
 	for (i = 1; i < rows; i++)  {
@@ -47,8 +50,11 @@ void initializeMatrix(int lower, int upper, int rows, int cols, int **matrix){
 		errExit("Passed NULL matrix. Cannot initialize.");
 
 	for (i = 0; i < rows; i++)  {
+		srand((int)time(NULL) + i);
 		for (j = 0; j < cols; j++) {
-			matrix[i][j] = (int) (drand48() * (upper - lower + 1) + lower);
+			matrix[i][j] = rand() % upper;
+		if (upper == INT_MAX)
+			matrix[i][j] *= -1;
 		}
 	}
 }
@@ -130,9 +136,8 @@ void printMatrix(int rows, int cols, int** matrix) {
 
 /* multiply matrices A and B, creates new C, and places result in C */
 void multiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int ***C) {
-	int i, j, k;
+	int i, j;
 	int cRows = aRows, cCols = bCols;
-	int sum;
 	if (A == NULL) {
 		errExit("Matrix A is null.");
 	}
@@ -146,7 +151,12 @@ void multiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int **B
 		errExit("A and B are not multipliable.");
 	}
 	allocateMatrix(cRows, cCols, C);
-
+    for (i = 0; i < aRows; i++) {
+        for (j = 0; j < bCols; j++) {
+            (*C)[i][j] = dotProduct(i, aCols, bRows, j, A, B);
+        }
+    }
+    /*
 	for (i = 0; i < aRows; i++) {
 		for (j = 0; j < bCols; j++) {
 			sum = 0;
@@ -156,13 +166,44 @@ void multiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int **B
 			(*C)[i][j] = sum;
 		}
 	}
+    */
 }
+
+void oldMultiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int ***C) {
+	int i, j, k;
+    int sum;
+	int cRows = aRows, cCols = bCols;
+	if (A == NULL) {
+		errExit("Matrix A is null.");
+	}
+	if (B == NULL) {
+		errExit("Matrix B is null.");
+	}
+	if (C == NULL) {
+		errExit("Matrix C is null.");
+	}
+	if (aCols != bRows) {
+		errExit("A and B are not multipliable.");
+	}
+	allocateMatrix(cRows, cCols, C);
+    
+	for (i = 0; i < aRows; i++) {
+		for (j = 0; j < bCols; j++) {
+			sum = 0;
+			for (k = 0; k < aCols; k++) {
+				sum += A[i][k] * B[k][j];
+			}
+			(*C)[i][j] = sum;
+		}
+	}
+    
+}
+
 
 /* Fix errors by recomputing using dot product */
 void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
 		int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
-	int sum;
-	int i, j, k;
+	int i, j;
 	int errorRow, errorCol;
 	if (rowE[0] == -1)
 		return;
@@ -173,11 +214,14 @@ void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int
 			for (i = 0; i < aRows &&i < rowErrors; i++) {
 				errorRow = rowE[i];
 				errorCol = colE[j];
+                /*
 				sum = 0;
 				for (k = 0; k < aCols; k++) {
 					sum += A[errorRow][k] * B[k][errorCol];
+				    C[errorRow][errorCol] = sum;
 				}
-				C[errorRow][errorCol] = sum;
+                */
+                C[errorRow][errorCol] = dotProduct(errorRow, aCols, bRows, errorCol, A, B); 
 				(*nCorrected)++;
 			}
 		}
@@ -187,15 +231,30 @@ void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int
 			for (j = 0; j < bCols && j < colErrors; j++) {
 				errorRow = rowE[i];
 				errorCol = colE[j];
+                /*
 				sum = 0;
 				for (k = 0; k < aCols; k++) {
 					sum += A[errorRow][k] * B[k][errorCol];
+				    C[errorRow][errorCol] = sum;
 				}
-				C[errorRow][errorCol] = sum;
+                */
+                C[errorRow][errorCol] = dotProduct(errorRow, aCols, bRows, errorCol, A, B); 
 				(*nCorrected)++;
 			}
 		}
 	}
+}
+
+
+int dotProduct(int aRow, int aCols, int bRows, int bCol, int **A, int **B) {
+    dotProductCalled++;
+    int sum = 0;
+    int i;
+
+    for (i = 0; i < aCols; i++) {
+            sum += A[aRow][i] * B[i][bCol];
+    }
+    return sum;
 }
 
 void checkSumA(int rows, int cols, int **A, int ***Aprime) {

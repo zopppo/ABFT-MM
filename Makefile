@@ -8,7 +8,7 @@ OBJS= abft.o\
 
 CFLAGS=-g -Wall -std=gnu89 
 
-all: matrix makeMatrix printMatrix checksumA checksumB detect correct multiplyMatrix compareMatrix abft 
+all: matrix makeMatrix printMatrix checksumA checksumB detect correct multiplyMatrix compareMatrix abft testMM
 
 
 ${OBJS}: matrix.h     \
@@ -21,11 +21,21 @@ matrix: ${OBJS}
 test:
 	./matrix
 
+tar:
+	tar -cvzf ABFT-MM.tgz *.c *.h *.py *.sh Makefile
+
+sendToClemson: tar
+	scp ABFT-MM.tgz clauded@access.cs.clemson.edu:~/
+
+getFromClemson: 
+	scp clauded@access.cs.clemson.edu:~/ABFT-MM.tgz .
+
 gdb:
 	gdb ./matrix
+
 clean:
 	rm -f *.o *.dat matrix makeMatrix printMatrix checksumA checksumB \
-	 detect correct multiplyMatrix compareMatrix abft 
+	 detect correct multiplyMatrix compareMatrix abft testMM
 
 makeMatrix: makeMatrix.o matrix.o
 	gcc makeMatrix.o matrix.o -o makeMatrix

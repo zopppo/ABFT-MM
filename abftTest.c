@@ -80,27 +80,22 @@ int main(int argc, char *argv[])
 	checkSumB(bRows, bCols, B, &Bprime);
 
 	multiplyMatrix(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, &Cprime);
+
 	detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
+
 	isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
 
-    int sections = 1;
-    printf("%d. ", sections);
-	printErrors(rowE, colE, rowErrors, colErrors, stdout);
-    // Print the locations of the errors
- 	while (!isCorrect) {
+ 	if (!isCorrect) {
 		recompute(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, Cprime, rowE, colE, rowErrors, colErrors, &nRecomputed);
-	    detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
-        isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
 		nRecomputeCalled++;
-        printf("%d. ", sections);
-        printErrors(rowE, colE, rowErrors, colErrors, stdout);
  	}
 
+
+	printErrors(rowE, colE, rowErrors, colErrors, stdout);
+	
 	printf("Corrected: %d ", nCorrected);
 	printf("Recomputed: %d ", nRecomputed);
 	printf("Recompute called: %d ", nRecomputeCalled);
-    printf("dotProduct called: %d ", dotProductCalled);
-
 	if (compareMatrix(aRows + 1, bCols + 1, Cprime, CprimeG) == true){
 		printf("Correct");
 	}
@@ -108,7 +103,7 @@ int main(int argc, char *argv[])
 		printf("Not Correct");
 		writeMatrix(aRows + 1, bCols + 1, Cprime, "error.dat");
 	}
-    printf("\n");
+	printf("\n");
 
 	deallocateMatrix(A);
 	deallocateMatrix(B);

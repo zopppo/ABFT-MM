@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-
+extern int dotProductCalled;
 typedef enum {false, true} bool;
 
 /* allocates a row-major 2D array using contiguous data block */
@@ -58,6 +58,8 @@ bool detect(int rows, int cols, int **matrix, int **rowE, int **colE, int *rowEr
 
 /* Correct errors in the matrix */
 bool correct(int rows, int cols, int **matrix, int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected);
+
+int dotProduct(int aRow, int aCols, int bRows, int bCol, int **A, int **B);
 
 /* Prints and error message and exits. */
 void errExit(char *errMsg, ...);
