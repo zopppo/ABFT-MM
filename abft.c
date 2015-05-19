@@ -83,8 +83,8 @@ int main(int argc, char *argv[])
 	detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
 	isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
 
-    int sections = 1;
-    printf("%d. ", sections);
+    int section = 1;
+    printf("%d. ", section);
 	printErrors(rowE, colE, rowErrors, colErrors, stdout);
     // Print the locations of the errors
     int expectedDotProducts = aRows * bCols;
@@ -97,7 +97,8 @@ int main(int argc, char *argv[])
 	    detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
         isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
 		nRecomputeCalled++;
-        printf("%d. ", sections);
+        printf("%d. ", section);
+        section++;
         printErrors(rowE, colE, rowErrors, colErrors, stdout);
  	}
 
