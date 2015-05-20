@@ -88,6 +88,8 @@ int main(int argc, char *argv[])
 	printErrors(rowE, colE, rowErrors, colErrors, stdout);
     // Print the locations of the errors
     int expectedDotProducts = aRows * bCols;
+    section++;
+
  	while (!isCorrect) {
         if (dotProductCalled > expectedDotProducts * 10) {
             printf("Exceeded expected dotProducts ");
