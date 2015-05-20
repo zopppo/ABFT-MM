@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <limits.h>
 
-#define SAFE_RECOMPUTE
+//#define SAFE_RECOMPUTE
 
 int dotProductCalled = 0;
 
