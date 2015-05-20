@@ -39,3 +39,8 @@ ehthumbs.db
 Thumbs.db
 *.dSYM
 *.swp
+
+# Generated Files $
+probability.txt
+*.dat
+
