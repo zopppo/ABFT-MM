@@ -22,7 +22,7 @@ test:
 	./matrix
 
 tar:
-	tar -cvzf ABFT-MM.tgz *.c *.h *.py *.sh Makefile
+	tar -cvzf ABFT-MM.tgz *.c *.h *.py *.sh Makefile README
 
 sendToClemson: tar
 	scp ABFT-MM.tgz clauded@access.cs.clemson.edu:~/

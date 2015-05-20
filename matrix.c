@@ -527,7 +527,6 @@ bool correct(int rows, int cols, int **matrix, int *rowE, int *colE, int rowErro
 
 /* Prints errors to a file */
 void printErrors(int *rowE, int *colE, int rowErrors, int colErrors, FILE *file) {
-    int i, j;
     if (file == NULL)
         errExit("File is null. Cannot printErrors.");
     if (rowE == NULL)
@@ -536,6 +535,8 @@ void printErrors(int *rowE, int *colE, int rowErrors, int colErrors, FILE *file)
         errExit("colE is NULL. Cannot printErrors.");
     fprintf(file, "rE: %d ", rowErrors);
     fprintf(file, "cE: %d ", colErrors);
+    #ifdef SHOW_COORDS
+    int i, j;
     if ((rowErrors > colErrors) || (rowErrors == colErrors)) {
         for (j = 0; j < colErrors; j++) {
             for (i = 0; i < rowErrors; i++) {
@@ -550,6 +551,7 @@ void printErrors(int *rowE, int *colE, int rowErrors, int colErrors, FILE *file)
             }
         }
     }
+    #endif
 }
 
 

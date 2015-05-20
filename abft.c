@@ -71,14 +71,15 @@ int main(int argc, char *argv[])
 		printf("\n");
 	}
 
+    // Read the matrices 
 	readMatrix(&aRows, &aCols, &A, aFileName);
 	readMatrix(&bRows, &bCols, &B, bFileName);
 	readMatrix(&cRows, &cCols, &CprimeG, cPrimeFileName);
 
 	checkSumA(aRows, aCols, A, &Aprime);
-
 	checkSumB(bRows, bCols, B, &Bprime);
 
+    // Do the multiplication we tend to target this bit right here
 	multiplyMatrix(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, &Cprime);
 	detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
 	isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
