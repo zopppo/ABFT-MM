@@ -213,7 +213,7 @@ bool recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int
     else if (colE[0] == -1)
         return false;
 
-    if ((rowErrors == 0 && colErrors > 0) && (colErrors == 0 && rowErrors > 0)) {
+    if ((rowErrors == 0 && colErrors > 0) || (colErrors == 0 && rowErrors > 0)) {
         return false;
     }
     if ((rowErrors > colErrors) || (rowErrors == colErrors)) {
