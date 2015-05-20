@@ -36,7 +36,7 @@ void printMatrix(int rows, int cols, int** matrix);
 void printErrors(int *rowE, int *colE, int rowErrors, int colErrors, FILE *file);
 
 /* Corrects errors found at Cij by recomputing Ai dot Bj */
-void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
+bool recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
 	int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected);
 
 /* multiply matrices A and B, creates new C, and places result in C */

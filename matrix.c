@@ -204,14 +204,18 @@ void oldMultiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int 
 
 
 /* Fix errors by recomputing using dot product */
-void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
+bool recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
         int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
     int i, j;
     int errorRow, errorCol;
     if (rowE[0] == -1)
-        return;
+        return false;
     else if (colE[0] == -1)
-        return;
+        return false;
+
+    if ((rowErrors == 0 && colErrors > 0) && (colErrors == 0 && rowErrors > 0)) {
+        return false;
+    }
     if ((rowErrors > colErrors) || (rowErrors == colErrors)) {
         for (j = 0; j < bCols && j < colErrors; j++) {
             for (i = 0; i < aRows &&i < rowErrors; i++) {
@@ -246,6 +250,7 @@ void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int
             }
         }
     }
+    return true;
 }
 
 
@@ -452,6 +457,7 @@ bool correct(int rows, int cols, int **matrix, int *rowE, int *colE, int rowErro
     int row, col;
     int sum;
     bool couldCorrect = true;
+    *nCorrected = 0;
     if (matrix == NULL)
         errExit("Matrix is NULL. Cannot correct");
     if (rowE == NULL)

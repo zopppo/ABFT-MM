@@ -91,12 +91,13 @@ int main(int argc, char *argv[])
     int expectedDotProducts = aRows * bCols;
     section++;
 
- 	while (!isCorrect) {
+    bool correctable = true;
+ 	while (!isCorrect && correctable) {
         if (dotProductCalled > expectedDotProducts * 10) {
             printf("Exceeded expected dotProducts ");
             break;
         }
-		recompute(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, Cprime, rowE, colE, rowErrors, colErrors, &nRecomputed);
+		correctable = recompute(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, Cprime, rowE, colE, rowErrors, colErrors, &nRecomputed);
 	    detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
         isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
 		nRecomputeCalled++;
