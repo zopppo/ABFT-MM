@@ -28,7 +28,9 @@ for i in range(0, count + 1):
     # Multiply the matrices to create the golden Cprime
     subprocess.call(['./multiplyMatrix', '-a', 'Aprime.dat', '-b', 'Bprime.dat', '-o', 'Cprime.dat'])
     # Run the abft driver with the matrices
-    output = subprocess.check_output("./run.sh", shell=True)
+    #output = subprocess.check_output("./run.sh", shell=True)
+    p = subprocess.Popen('./run.sh', shell=True, stdout=subprocess.PIPE)
+    output, err = p.communicate()
     # decode the output from a binary string to utf-8
     output = output.decode("utf-8")
     out.write(output)
