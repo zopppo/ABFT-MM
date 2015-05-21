@@ -5,9 +5,13 @@ import subprocess
 output_file = "result"
 # The probability table
 prob_table = "probability.txt"
-# The number of trials we will be running 
-count = int(subprocess.check_output('cat ' + prob_table + ' | wc -l', shell=True)) - 1
-# The number of runs per trial
+
+# Get the number of lines in the probability.txt file
+p = subprocess.Popen('cat ' + prob_table + ' | wc -l', shell=True, stdout=subprocess.PIPE)
+lines, err = p.communicate()
+
+# The number of trials we will be running
+count = int(lines) - 1
 
 out = open(output_file, 'w')
 prob = open(prob_table, 'r')
@@ -28,7 +32,6 @@ for i in range(0, count + 1):
     # Multiply the matrices to create the golden Cprime
     subprocess.call(['./multiplyMatrix', '-a', 'Aprime.dat', '-b', 'Bprime.dat', '-o', 'Cprime.dat'])
     # Run the abft driver with the matrices
-    #output = subprocess.check_output("./run.sh", shell=True)
     p = subprocess.Popen('./run.sh', shell=True, stdout=subprocess.PIPE)
     output, err = p.communicate()
     # decode the output from a binary string to utf-8
