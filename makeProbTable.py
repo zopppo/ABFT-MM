@@ -27,7 +27,7 @@ def makeProbabilityTable(startingProbability, stepIncrement, numberOfRuns, runsP
     for i in range(0, numberOfRuns):
         for j in range(0, runsPerProb):
             # Write the probability to the file
-            file .write(str(currentProbability) + '\n')
+            file .write('{:.7f}'.format(currentProbability) + '\n')
         if logarithmic:
             currentProbability *= stepIncrement
         else: 
