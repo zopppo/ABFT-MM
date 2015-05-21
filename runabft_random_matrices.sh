@@ -1,6 +1,6 @@
 #! /bin/bash
 OUTPUTFILE=result
-COUNT=10
+COUNT=10000
 
 if [ -e "$OUTPUTFILE" ]; then
     rm "$OUTPUTFILE"
