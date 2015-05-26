@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     bool correctable = true;
 
  	while (compareMatrix(aRows + 1, bCols + 1, Cprime, CprimeG) != true  && correctable) {
-        if (dotProductCalled > expectedDotProducts * 10) {
+        if (dotProductCalled > expectedDotProducts * 100) {
             printf("Exceeded expected dotProducts ");
             break;
         }
