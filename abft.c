@@ -92,14 +92,15 @@ int main(int argc, char *argv[])
     section++;
 
     bool correctable = true;
- 	while (!isCorrect && correctable) {
+
+ 	while (compareMatrix(aRows + 1, bCols + 1, Cprime, CprimeG) != true  && correctable) {
         if (dotProductCalled > expectedDotProducts * 10) {
             printf("Exceeded expected dotProducts ");
             break;
         }
 		correctable = recompute(aRows + 1, aCols, bRows, bCols + 1, Aprime, Bprime, Cprime, rowE, colE, rowErrors, colErrors, &nRecomputed);
 	    detect(aRows + 1, bCols + 1, Cprime, &rowE, &colE, &rowErrors, &colErrors);
-        isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
+        //isCorrect = correct(aRows + 1, bCols + 1, Cprime, rowE, colE, rowErrors, colErrors, &nCorrected);
 		nRecomputeCalled++;
         printf("%d. ", section);
         section++;
