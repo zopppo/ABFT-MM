@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     section++;
 
  	while (compareMatrix(aRows + 1, bCols + 1, Cprime, CprimeG) != true) {
-        if (dotProductCalled > expectedDotProducts * 100) {
+        if (dotProductCalled > expectedDotProducts * 10) {
             printf("Exceeded expected dotProducts ");
             break;
         }
