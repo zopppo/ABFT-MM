@@ -4,7 +4,7 @@
 #include <limits.h>
 
 //#define SAFE_RECOMPUTE
-
+//#define SHOW_COORDS
 int dotProductCalled = 0;
 
 /* allocates a row-major 2D array using contiguous data block */
@@ -51,7 +51,7 @@ void initializeMatrix(int lower, int upper, int rows, int cols, int **matrix){
         errExit("Passed NULL matrix. Cannot initialize.");
 
     for (i = 0; i < rows; i++)  {
-        srand((int)time(NULL) + i);
+        //srand((int)time(NULL) + i);
         for (j = 0; j < cols; j++) {
             matrix[i][j] = rand() % upper;
             if (upper == INT_MAX)
@@ -204,19 +204,34 @@ void oldMultiplyMatrix(int aRows, int aCols, int bRows, int bCols, int **A, int 
 
 
 /* Fix errors by recomputing using dot product */
-bool recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
+void recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int **C,
         int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
     int i, j;
     int errorRow, errorCol;
-    if (rowE[0] == -1)
-        return false;
-    else if (colE[0] == -1)
-        return false;
+    if (rowErrors == -1 || colErrors == -1)
+        return;
 
-    if ((rowErrors == 0 && colErrors > 0) || (colErrors == 0 && rowErrors > 0)) {
-        return false;
+    // Recompute every error column if we have no error rows
+    if (rowErrors == 0 && colErrors > 0) {
+        for (i = 0; i < colErrors; i++) {
+            errorCol = colE[i];
+            for (j = 0; j < aRows; j++) {
+                errorRow = j;
+                C[errorRow][errorCol] =  dotProduct(errorRow, aCols,bRows, errorCol, A, B);
+            }
+        }
     }
-    if ((rowErrors > colErrors) || (rowErrors == colErrors)) {
+    else if (colErrors == 0 && rowErrors > 0) {
+         for (i = 0; i < rowErrors; i++) {
+            errorRow = rowE[i];
+            for (j = 0; j < bCols; j++) {
+                errorCol = j;
+                C[errorRow][errorCol] =  dotProduct(errorRow, aCols, bRows, errorCol, A, B);
+            }
+        }
+       
+    }
+    else if ((rowErrors > colErrors) || (rowErrors == colErrors)) {
         for (j = 0; j < bCols && j < colErrors; j++) {
             for (i = 0; i < aRows &&i < rowErrors; i++) {
                 errorRow = rowE[i];
@@ -250,7 +265,6 @@ bool recompute(int aRows, int aCols, int bRows, int bCols, int **A, int **B, int
             }
         }
     }
-    return true;
 }
 
 

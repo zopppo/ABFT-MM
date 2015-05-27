@@ -8,7 +8,7 @@ OBJS= abft.o\
 
 CFLAGS=-g -Wall -std=gnu89 
 
-all: matrix makeMatrix printMatrix checksumA checksumB detect correct multiplyMatrix compareMatrix abft testMM
+all: matrix makeMatrix printMatrix checksumA checksumB detect correct multiplyMatrix compareMatrix abft 
 
 
 ${OBJS}: matrix.h     \
@@ -35,7 +35,7 @@ gdb:
 
 clean:
 	rm -f *.o *.dat matrix makeMatrix printMatrix checksumA checksumB \
-	 detect correct multiplyMatrix compareMatrix abft testMM
+	 detect correct multiplyMatrix compareMatrix abft 
 
 makeMatrix: makeMatrix.o matrix.o
 	gcc makeMatrix.o matrix.o -o makeMatrix

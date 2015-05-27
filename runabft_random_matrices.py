@@ -24,8 +24,8 @@ for i in range(0, count + 1):
         oldProbability = currentProbability
 
     # Randomly create matrices
-    subprocess.call(['./makeMatrix', '-o', 'A.dat', '-m', '45', '-n', '45', '-l', '0', '-u', '127'])
-    subprocess.call(['./makeMatrix', '-o', 'B.dat', '-m', '45', '-n', '45', '-l', '0', '-u', '127'])
+    subprocess.call(['./makeMatrix', '-o', '.dat', '-m', '5', '-n', '5', '-l', '0', '-u', '10', '-d', ''])
+    #subprocess.call(['./makeMatrix', '-o', 'matrix.dat', '-m', '5', '-n', '5', '-l', '0', '-u', '10'])
     # Check sum the matrices
     subprocess.call(['./checksumA', '-a', 'A.dat', '-o' , 'Aprime.dat'])
     subprocess.call(['./checksumB', '-b', 'B.dat', '-o' , 'Bprime.dat'])

@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 
 	readMatrix(&rows, &cols, &matrix, inFileName);
 	detect(rows, cols, matrix, &rowE, &colE, &rowErrors, &colErrors);
+    writeReport(rowE, colE, rowErrors, colErrors, outFileName);
 	deallocateMatrix(matrix);
 	free(rowE);
 	free(colE);
