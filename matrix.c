@@ -424,7 +424,7 @@ bool detect(int rows, int cols, int **matrix, int **rowE, int **colE, int *rowEr
             (*colErrors)++;
         }
     }
-    return (*rowErrors != 0 && *colErrors != 0);
+    return !(*rowErrors != 0 && *colErrors != 0);
 }
 /* Finds the sum of all elements in the row excluding the element at eRow and the checksum element */
 int exclRowSum(int row, int col, int rows, int cols, int **matrix) {
