@@ -357,13 +357,14 @@ void copyMatrix(int rows, int cols, int **sourceMatrix, int **destMatrix) {
     }
 }
 
-/* Detects errors and prints them to a file */
+/* Detects errors and prints them to a file 
+ * Returns false if the matrix does have errors */
 bool detect(int rows, int cols, int **matrix, int **rowE, int **colE, int *rowErrors, int *colErrors) {
     int i, j;
     int check;
 
     if (rows <= 0)
-        errExit("Rows must be positive. Cannot detect.");
+            errExit("Rows must be positive. Cannot detect.");
     else if (cols <= 0)
         errExit("Cols must be positive. Cannot detect.");
 
@@ -465,7 +466,8 @@ int exclColSum(int row, int col, int rows, int cols, int **matrix) {
     return sum;
 }
 
-/* Accepts a full checksum matrix */
+/* Accepts a full checksum matrix
+ * Returns true if the matrix can be corrected*/
 bool correct(int rows, int cols, int **matrix, int *rowE, int *colE, int rowErrors, int colErrors, int *nCorrected) {
     int i;
     int row, col;
